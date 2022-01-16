@@ -6,6 +6,7 @@
     "configurations": [
         {
             "name": "Debug Nucleo STM32F446",
+            "preLaunchTask": "stm32-load",
             "cwd": "${workspaceRoot}",
             "executable": "${command:cmake.launchTargetPath}",
             "request": "launch",
