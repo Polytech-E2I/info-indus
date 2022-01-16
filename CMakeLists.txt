@@ -12,32 +12,32 @@ add_compile_definitions(
     "STM32F446xx"
 )
 
+set(ARCHFLAGS
+    -mtune=cortex-m4
+    -mthumb
+    -march=armv7e-m
+    -mfloat-abi=hard
+    -mfpu=fpv4-sp-d16
+)
+
 add_compile_options(
-    "-mcpu=cortex-m4"
-    "-mthumb"
-    #"-mfpu=fpv4-sp-d16"
-    "-mfloat-abi=hard"
+    ${ARCHFLAGS}
 
-    "-fdata-sections"
-    "-ffunction-sections"
+    -fsingle-precision-constant
 
-    "-Wall"
+    -Wall
+    -Wdouble-promotion
 
-    $<$<CONFIG:Debug>:-Og>
+    -O0
+    -Os
 )
 
 add_link_options(
-    "-T${CMAKE_SOURCE_DIR}/STM32-files/stm32_flash.ld"
-    "-mcpu=cortex-m4"
-    "-mthumb"
-    #"-mfpu=fpv4-sp-d16"
-    "-mfloat-abi=hard"
+    -T${CMAKE_SOURCE_DIR}/STM32-files/stm32_flash.ld
 
-    "-lc"
-    "-lm"
-    "-lnosys"
-    "-Wl,-Map=${PROJECT_NAME}.map,--cref"
-    "-Wl,--gc-sections"
+    ${ARCHFLAGS}
+
+    -Wl,--gc-sections
 )
 
 include_directories(
@@ -51,6 +51,9 @@ include_directories(
 add_subdirectory("STM32-files/Polytech-library")
 add_subdirectory("STM32-files/cmsis_lib")
 
+set(STM32_SCRIPTS_DIR ${CMAKE_SOURCE_DIR}/STM32-files/scripts)
+set(STM32_LOAD_CMD ${STM32_SCRIPTS_DIR}/stm32-load)
+set(STM32_DBG_CMD ${STM32_SCRIPTS_DIR}/stm32-gdb)
 
 file(GLOB TP_dirs CONFIGURE_DEPENDS "TP*")
 
@@ -59,5 +62,17 @@ foreach(TP_dir ${TP_dirs})
 
     foreach(Exo_dir ${Exo_dirs})
         add_subdirectory(${Exo_dir})
+
+        get_filename_component(TP_name ${TP_dir} NAME)
+        get_filename_component(Exo_name ${Exo_dir} NAME)
+
+        set(CurrentTarget ${TP_name}_${Exo_name}.elf)
+
+        add_custom_target(${CurrentTarget}-load
+            ${STM32_LOAD_CMD} $<TARGET_FILE:${CurrentTarget}>
+        )
+        add_custom_target(${CurrentTarget}-dbg
+            ${STM32_DBG_CMD} $<TARGET_FILE:${CurrentTarget}>
+        )
     endforeach()
 endforeach()

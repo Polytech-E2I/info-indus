@@ -15,4 +15,4 @@ string(REPLACE " " "_" ProjectId ${ProjectId})
 
 file(GLOB files_src CONFIGURE_DEPENDS "*.h" "*.c")
 
-add_executable(${ProjectId} ${files_src})
+add_executable(${ProjectId}.elf ${files_src})

@@ -14,10 +14,10 @@ string(APPEND ProjectId "_" "${Exercice}")
 
 string(REPLACE " " "_" ProjectId ${ProjectId})
 
-file(GLOB files_src CONFIGURE_DEPENDS "src/*.h" "src/*.c")
+file(GLOB files_src CONFIGURE_DEPENDS "src/*.h" "src/*.c" "src/*.s")
 
-add_executable(${ProjectId} ${files_src})
-target_link_libraries(${ProjectId} PUBLIC
+add_executable(${ProjectId}.elf ${files_src})
+target_link_libraries(${ProjectId}.elf PUBLIC
     cmsis_lib
     Polytech-library
 )
