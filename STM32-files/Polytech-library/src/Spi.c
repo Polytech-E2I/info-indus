@@ -25,7 +25,9 @@ void Spi1_Init(void)
 
     SPI1->CR1 |=
           SPI_CR1_MSTR  // Master mode
-        | SPI_CR1_BR    // Lowest clock
+        | SPI_CR1_BR_0
+        //| SPI_CR1_BR_1
+        //| SPI_CR1_BR_2
         | SPI_CR1_CPHA  // CPHA = 1
         | SPI_CR1_CPOL  // CPOL = 1
         | SPI_CR1_DFF   // 16 bit frames

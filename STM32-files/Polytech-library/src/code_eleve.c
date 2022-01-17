@@ -70,9 +70,13 @@ void WriteToDAC(unsigned int value)
 
 
 //------------------------------------------------------------------------------------------
+volatile unsigned int triIndex = 0;
 void SignalTriangle(void)
 {
-    // A compl�ter ...
+    for(triIndex = 0 ; triIndex <= 0x7FF ; ++triIndex)
+    {
+        WriteToDAC(triIndex);
+    }
 }
 
 

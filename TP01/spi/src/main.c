@@ -45,7 +45,7 @@ int main(void)
     {
         WriteToDAC(g_value);
 
-        //SignalTriangle();
+        SignalTriangle();
 
         //RestitutionAnalogue();
     }
