@@ -61,14 +61,11 @@ static void Drive_CS_pin(char value)
 //----------------------------------------------------------------------------------------
 void WriteToDAC(unsigned int value)
 {
-    while(SPI1->SR & SPI_SR_BSY);
-
-    chipSelect(HIGH);
-
     chipSelect(LOW);
     SPI1->DR = (1 << 12) | value; // Bit 12 to enable Vout
     while( !(SPI1->SR & SPI_SR_TXE) );
-
+    while(SPI1->SR & SPI_SR_BSY);
+    chipSelect(HIGH);
 }
 
 
