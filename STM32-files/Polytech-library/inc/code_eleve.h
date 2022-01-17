@@ -20,4 +20,6 @@ void WriteToDAC(unsigned int value);
 void SignalTriangle(void);
 void RestitutionAnalogue(void);
 
+void chipSelect(int status);
+
 #endif /* INC_CODE_ELEVE_H_ */

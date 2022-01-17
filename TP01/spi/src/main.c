@@ -16,34 +16,37 @@
 /********************** VARIABLES *********************************************************************/
 unsigned int adc_value;
 unsigned int inter_value;
+unsigned int g_value = 0x7FF;
+
 
 /*************************** CODE **********************************************************************/
 int main(void)
 {
-	//Init clock and flash
-	SystemInit();
+    //Init clock and flash
+    SystemInit();
 
-	// Setting the clock's source and setting the prescaler of HCLK, PCLK1 & PCLK2
-	ClockConfiguration();
+    // Setting the clock's source and setting the prescaler of HCLK, PCLK1 & PCLK2
+    ClockConfiguration();
 
-	SetClocks(); 			// set peripherals clocks
+    SetClocks(); 			// set peripherals clocks
 
-	InitPeripheral();		// Init peripheral I/O's
+    InitPeripheral();		// Init peripheral I/O's
 
-	//InitAdc();				//init ADC configuration
+    //InitAdc();				//init ADC configuration
 
-	//InitTimer_1();			//init timer 1
+    //InitTimer_1();			//init timer 1
 
 //	InitInterrupt();		//init interrupt handlers
 
-	Spi1_Init();			//init SPI mode
+    Spi1_Init();			//init SPI mode
 
-	for(;;)
-	{
-		WriteToDAC(0x7FF);	//demi-échelle
 
-		//SignalTriangle();
+    for(;;)
+    {
+        WriteToDAC(g_value);
 
-		//RestitutionAnalogue();
-	}
+        //SignalTriangle();
+
+        //RestitutionAnalogue();
+    }
 }

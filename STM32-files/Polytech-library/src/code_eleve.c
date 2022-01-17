@@ -32,21 +32,21 @@ unsigned int count;
 /********************************************************************************/
 /*					SOURCE CODE													*/
 /********************************************************************************/
-/* timer par décrément d'une variable ou par utilisation du timer 1*/
+/* timer par dï¿½crï¿½ment d'une variable ou par utilisation du timer 1*/
 static void Timer_t1ms(unsigned int period)
 {
-	unsigned int i;
+    unsigned int i;
 
-	for(i = 0; i < period; i++)
-	{
-		StartTimer_1();						//démarre le timer
+    for(i = 0; i < period; i++)
+    {
+        StartTimer_1();						//dï¿½marre le timer
 
-		while(GetUpdateEvent() == 0){;}		//contrôle si overflow du compteur (CNT == ARR)
+        while(GetUpdateEvent() == 0){;}		//contrï¿½le si overflow du compteur (CNT == ARR)
 
-		ResetUpdateEvent();					//reset du flag
+        ResetUpdateEvent();					//reset du flag
 
-		StopTimer_1();						//arrêt du compteur
-	}
+        StopTimer_1();						//arrï¿½t du compteur
+    }
 }
 
 
@@ -55,27 +55,45 @@ static void Timer_t1ms(unsigned int period)
 //---------------------------------------------------------------------------------------
 static void Drive_CS_pin(char value)
 {
-	// A compléter ...
+    // A complï¿½ter ...
 }
 
 //----------------------------------------------------------------------------------------
 void WriteToDAC(unsigned int value)
 {
-	// A compléter ...
+    while(SPI1->SR & SPI_SR_BSY);
+
+    chipSelect(HIGH);
+
+    chipSelect(LOW);
+    SPI1->DR = (1 << 12) | value; // Bit 12 to enable Vout
+    while( !(SPI1->SR & SPI_SR_TXE) );
+
 }
 
 
 //------------------------------------------------------------------------------------------
 void SignalTriangle(void)
 {
-	// A compléter ...
+    // A complï¿½ter ...
 }
 
 
 //------------------------------------------------------------------------------------------
 void RestitutionAnalogue(void)
 {
-	// A compléter ...
+    // A complï¿½ter ...
 }
 
 
+void chipSelect(int status)
+{
+    if(status == LOW)
+    {
+        GPIOB->ODR &= ~(GPIO_ODR_ODR_6);
+    }
+    else
+    {
+        GPIOB->ODR |= GPIO_ODR_ODR_6;
+    }
+}
