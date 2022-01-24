@@ -7,7 +7,7 @@
 /********************************************************************************/
 /*					STATIC FUNCTION PROTOTYPES								    */
 /********************************************************************************/
-static void Adc_1_Init(void);
+//static void Adc_1_Init(void);
 
 /********************************************************************************/
 /*					FUNCTION CODE												*/
@@ -34,6 +34,8 @@ void InitAdc(void)
 /********************************************************************************/
 static void Adc_1_Init(void)
 {
+	GPIOA->MODER |= GPIO_MODER_MODER0; // PA0 Analog mode
+
 	ADC1->SQR3 = 0x00000000;	/* 1 conversion of channel 0*/
 
 	ADC1->SMPR2 = 0x00000003;	/*56 clock cycles sampling of channel 0*/

@@ -19,6 +19,7 @@
 
 // PROTOTYPES ****************************************************************//
 void InitAdc(void);
+static void Adc_1_Init(void);
 
 //ADC 1
 void ADC_1_StartConversion(void);

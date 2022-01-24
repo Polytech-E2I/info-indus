@@ -16,7 +16,7 @@
 /********************** VARIABLES *********************************************************************/
 unsigned int adc_value;
 unsigned int inter_value;
-unsigned int g_value = 0x7FF;
+volatile unsigned int g_value = 0x7FF;
 
 
 /*************************** CODE **********************************************************************/
@@ -32,20 +32,31 @@ int main(void)
 
     InitPeripheral();		// Init peripheral I/O's
 
-    //InitAdc();				//init ADC configuration
+    InitAdc();				//init ADC configuration
+    //Adc_1_Init();
 
-    //InitTimer_1();			//init timer 1
+    InitTimer_1();			//init timer 1
 
 //	InitInterrupt();		//init interrupt handlers
 
     Spi1_Init();			//init SPI mode
 
+    StartTimer_1();
 
     for(;;)
     {
-        WriteToDAC(g_value);
+        //WriteToDAC(g_value);
 
-        SignalTriangle();
+        //SignalTriangle();
+
+        ADC_1_StartConversion();
+
+        while(!ADC_1_CheckEndOfConversion() && !GetUpdateEvent());
+
+        WriteToDAC(ADC_1_GetResult());
+
+        ADC_1_ClearEndOfConversion();
+        ResetUpdateEvent();
 
         //RestitutionAnalogue();
     }
