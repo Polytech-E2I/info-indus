@@ -35,6 +35,7 @@ unsigned int count;
 /* timer par d�cr�ment d'une variable ou par utilisation du timer 1*/
 static void Timer_t1ms(unsigned int period)
 {
+    GPIOA->ODR |= GPIO_ODR_ODR_1;
     unsigned int i;
 
     for(i = 0; i < period; i++)
@@ -47,6 +48,7 @@ static void Timer_t1ms(unsigned int period)
 
         StopTimer_1();						//arr�t du compteur
     }
+    GPIOA->ODR &= ~GPIO_ODR_ODR_1;
 }
 
 
@@ -83,7 +85,14 @@ void SignalTriangle(void)
 //------------------------------------------------------------------------------------------
 void RestitutionAnalogue(void)
 {
-    // A compl�ter ...
+    Timer_t1ms(1);
+    ADC_1_StartConversion();
+
+    while(!ADC_1_CheckEndOfConversion());
+
+    WriteToDAC(ADC_1_GetResult());
+
+    ADC_1_ClearEndOfConversion();
 }
 
 

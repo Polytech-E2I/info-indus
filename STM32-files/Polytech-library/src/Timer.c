@@ -1,5 +1,5 @@
 /* Polytech Grenoble */
-/* Technologie de l'information pour la santé*/
+/* Technologie de l'information pour la santï¿½*/
 /*TP 2*/
 
 /********************************************************************************/
@@ -24,6 +24,7 @@ void InitTimer_1(void)
 	TIM1->CR1 &= ~0x0001;	/*disable Timer 1*/
 
 	TIM1->PSC = 9999;		/*10 KHz*/
+	//TIM1->PSC = 9;			/*10 MHz*/
 	TIM1->ARR = 10;
 
 	TIM1->CR1 = 0x0000;		/*set CR1*/

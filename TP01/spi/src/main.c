@@ -41,23 +41,15 @@ int main(void)
 
     Spi1_Init();			//init SPI mode
 
-    StartTimer_1();
-
     for(;;)
     {
         //WriteToDAC(g_value);
 
         //SignalTriangle();
+        GPIOB->ODR |= GPIO_ODR_ODR_0;
 
-        ADC_1_StartConversion();
+        RestitutionAnalogue();
 
-        while(!ADC_1_CheckEndOfConversion() && !GetUpdateEvent());
-
-        WriteToDAC(ADC_1_GetResult());
-
-        ADC_1_ClearEndOfConversion();
-        ResetUpdateEvent();
-
-        //RestitutionAnalogue();
+        GPIOB->ODR &= ~GPIO_ODR_ODR_0;
     }
 }

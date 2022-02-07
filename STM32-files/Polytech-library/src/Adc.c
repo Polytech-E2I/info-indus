@@ -35,10 +35,15 @@ void InitAdc(void)
 static void Adc_1_Init(void)
 {
 	GPIOA->MODER |= GPIO_MODER_MODER0; // PA0 Analog mode
+	GPIOA->MODER |= GPIO_MODER_MODER1_0; // PA1 Output mode
+	GPIOA->OTYPER &= ~GPIO_OTYPER_OT_1;  // PA1 Push-pull
+	GPIOB->MODER |= GPIO_MODER_MODER0_0; // PB0 Output mode
+	GPIOB->OTYPER &= ~GPIO_OTYPER_OT_0;  // PB0 Push-pull
 
 	ADC1->SQR3 = 0x00000000;	/* 1 conversion of channel 0*/
 
-	ADC1->SMPR2 = 0x00000003;	/*56 clock cycles sampling of channel 0*/
+	//ADC1->SMPR2 = 0x00000003;	/*56 clock cycles sampling of channel 0*/
+	ADC1->SMPR2 = 0x00000000;	/*3 clock cycles sampling of channel 0*/
 
 	ADC1->CR1 = 0x00000000;		/*resolution = 12 bits + pas d'interruptions*/
 
