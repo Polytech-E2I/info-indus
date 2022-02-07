@@ -12,9 +12,30 @@
             "displayName": "",
             "description": "",
             "generator": "Unix Makefiles",
-            "binaryDir": "${sourceDir}/build/${presetName}",
+            "binaryDir": "${sourceDir}/build/${presetName}"
+        },
+        {
+            "name": "base-arm",
+            "inherits": "base",
+            "hidden": true,
             "cacheVariables": {
                 "CMAKE_TOOLCHAIN_FILE": "arm-none-eabi-gcc.cmake"
+            }
+        },
+        {
+            "name": "debug-arm",
+            "inherits": "base-arm",
+            "displayName": "Debug ARM",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug"
+            }
+        },
+        {
+            "name": "release-arm",
+            "inherits": "base-arm",
+            "displayName": "Release ARM",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release"
             }
         },
         {
@@ -33,8 +54,23 @@
                 "CMAKE_BUILD_TYPE": "Release"
             }
         }
+
     ],
     "buildPresets": [
+        {
+            "name": "all-debug-arm",
+            "displayName": "Build all, Debug ARM",
+            "description": "",
+            "configurePreset": "debug-arm",
+            "configuration": "Debug"
+        },
+        {
+            "name": "all-release-arm",
+            "displayName": "Build all, Release ARM",
+            "description": "",
+            "configurePreset": "release-arm",
+            "configuration": "Release"
+        },
         {
             "name": "all-debug",
             "displayName": "Build all, Debug",
