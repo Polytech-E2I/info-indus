@@ -55,7 +55,7 @@ int main(void)
 
     while(1)
     {
-        outBuffer = getchar(stdin);
+        outBuffer = getchar();
 
         if(outBuffer == '\n')
         {
@@ -79,10 +79,39 @@ int main(void)
         // Niveau 1.0 V
         '8', '0', ' ', '1', '.', '0', '\n',
         // Fréquence
-        '4', '0', ' ', '0', '0', '0', '0', '\n'
+        '4', '0', ' ', '1', '0', '0', '0', '\n'
     };
 
     write(rs232, &outBuffer, sizeof(outBuffer));
+
+#endif
+
+#if 1
+
+    char wobulationInitBuffer[] =
+    {
+        // Sinus
+        '0', '0', '\n',
+        // Niveau 1.0 V
+        '8', '0', ' ', '1', '.', '0', '\n',
+    };
+
+    char wobulationLoopBuffer[] =
+    {
+        // Fréquence
+        '4', '0', ' ',
+        '0', '0', '0', '0',
+        '\n'
+    };
+
+    write(rs232, &wobulationInitBuffer, sizeof(wobulationInitBuffer));
+
+    for(int i = 0 ; i < 1000 ; ++i)
+    {
+        sprintf(&(wobulationLoopBuffer[3]), "%d", i);
+
+        write(rs232, &wobulationLoopBuffer, sizeof(wobulationLoopBuffer));
+    }
 
 #endif
 
