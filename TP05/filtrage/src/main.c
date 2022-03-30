@@ -11,6 +11,7 @@
 #include "Port_conf.h"
 #include "Spi.h"
 #include "Timer.h"
+#include "Uart.h"
 
 
 /********************** VARIABLES *********************************************************************/
@@ -43,10 +44,11 @@ int main(void)
 
     for(;;)
     {
-    #if 0
         //WriteToDAC(g_value);
 
         //SignalTriangle();
+    #if 1
+        RemplissageBuffer();
     #else
         GPIOB->ODR |= GPIO_ODR_ODR_0;
 

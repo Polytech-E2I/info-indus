@@ -86,3 +86,93 @@ static void EnablePeripheralClocks(void)
 					| RCC_APB2ENR_TIM1EN
 					| RCC_APB2ENR_SYSCFGEN);	//enable ADC1, TIM1, SYSCFG
 }
+
+
+uint32_t get_PLL_PCLK() {
+  uint32_t pllcfgr=RCC->PLLCFGR;
+  uint32_t 
+    M=(pllcfgr>>0)&0x3f,
+    N=(pllcfgr>>6)&0x1ff,
+    P=((pllcfgr>>16)&0x3)*2+2;
+  PLLSRC SRC=(pllcfgr>>22)&0x1;
+  if (SRC==PLLSRC_HSI) {
+    return (HSI_FREQ*MHz/M*N/P);
+  } else {
+    return (HSE_FREQ*MHz/M*N/P);
+  }
+}
+
+uint32_t get_PLL_RCLK() {
+  uint32_t pllcfgr=RCC->PLLCFGR;
+  uint32_t 
+    M=(pllcfgr>>0)&0x3f,
+    N=(pllcfgr>>6)&0x1ff,
+    R=(pllcfgr>>28)&0x7;
+  PLLSRC SRC=(pllcfgr>>22)&0x1;
+  if (SRC==PLLSRC_HSI) {
+    return (HSI_FREQ*MHz/M*N/R);
+  } else {
+    return (HSE_FREQ*MHz/M*N/R);
+  }
+}
+
+uint32_t get_SYSCLK() {
+  SW SWS=(RCC->CFGR>>2)&0x3;
+  switch (SWS) {
+  case SW_HSI:
+    return (HSI_FREQ*MHz);
+  case SW_HSE:
+    return (HSE_FREQ*MHz);
+  case SW_PLL_P:
+    return get_PLL_PCLK();
+  case SW_PLL_R:
+    return get_PLL_RCLK();
+  }
+  return 0;
+}
+
+uint32_t get_AHBCLK() {
+  uint32_t cfgr=RCC->CFGR;
+  if ((cfgr&(1<<7))==0) {
+    return (get_SYSCLK());
+  } else {
+    return(get_SYSCLK() >> (((cfgr>>4)&0x7)+1));
+  } 
+}
+
+uint32_t get_APB1CLK() {
+  uint32_t cfgr=RCC->CFGR;
+  if ((cfgr&(1<<12))==0) {
+    return (get_AHBCLK());
+  } else {
+    return(get_AHBCLK() >> (((cfgr>>10)&0x3)+1));
+  } 
+}
+
+uint32_t get_APB2CLK() {
+  uint32_t cfgr=RCC->CFGR;
+  if ((cfgr&(1<<15))==0) {
+    return (get_AHBCLK());
+  } else {
+    return(get_AHBCLK() >> (((cfgr>>13)&0x3)+1));
+  } 
+}
+
+uint32_t get_APB1TIMCLK() {
+  uint32_t cfgr=RCC->CFGR;
+  if ((cfgr&(1<<12))==0) {
+    return (get_APB1CLK());
+  } else {
+    return (get_APB1CLK()*2);
+  } 
+}
+
+uint32_t get_APB2TIMCLK() {
+  uint32_t cfgr=RCC->CFGR;
+  if ((cfgr&(1<<15))==0) {
+    return (get_APB2CLK());
+  } else {
+    return (get_APB2CLK()*2);
+  } 
+}
+

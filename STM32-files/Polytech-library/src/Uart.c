@@ -2,6 +2,7 @@
 #include "stm32f4xx.h"
 
 #include "Uart.h"
+#include "Clocks.h"
 
 /********************************** VARIABLES ***************************************************************/
 
@@ -16,6 +17,24 @@ void InitUart1(void)
 	USART1->GTPR = 0x00000000;
 
 	USART1->CR1 |= 0x00002000;		/*enable USART 1*/
+}
+
+void setup_USART2_RSD(uint32_t baudrate)
+{
+    RCC->APB1ENR |= (1 << 17);
+
+    USART2->CR1 |= (1 << 13);                // UE
+    USART2->CR1 &= ~(1 << 12);               // 8-bit
+    USART2->CR2 &= ~(3 << 12);               // 1 stop bit
+    USART2->BRR = get_APB1CLK()/baudrate;    // baud rate
+    USART2->CR1 |= (1 << 3);                 // TE
+
+    // Activate interrupts
+    NVIC->ISER[1] |= (1 << 6);
+    NVIC->IP[6] = 0x00;
+
+    USART2->CR1 |= (1 << 2);                 // RE
+    USART2->CR1 |= (1 << 5);                 // Interrupt on receive
 }
 
 //---------------------------------------------------------------------------------------------------------

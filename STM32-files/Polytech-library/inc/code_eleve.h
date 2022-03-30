@@ -21,6 +21,6 @@ void SignalTriangle(void);
 void RestitutionAnalogue(void);
 
 void chipSelect(int status);
-static void Timer_t1ms(unsigned int period);
+void Timer_t1ms(unsigned int period);
 
 #endif /* INC_CODE_ELEVE_H_ */
